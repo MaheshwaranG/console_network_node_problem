@@ -45,103 +45,55 @@ public class RoutePath {
 
     public static boolean tracePath(Object startNode, Computer endNode, int weight, ArrayList<String> visitedNodes) {
         boolean status = false;
+        ConnectedNodes connected;
         if (startNode instanceof Computer) {
             Computer node = (Computer) startNode;
-            if (node.getLinked().connectedComputers.containsKey(endNode.getName())) {
-                visitedNodes.add(endNode.getName());
-                finalVisitedNodes.clear();
-                finalVisitedNodes.addAll(visitedNodes);
-                return true;
-            } else {
-                ConnectedNodes connected = node.getLinked();
-                HashMap<String, Computer> connectedComputers = connected.connectedComputers;
-                for (Map.Entry<String, Computer> nodeItem : connectedComputers.entrySet()) {
+            connected = node.getLinked();
+        } else {
+            Repeter node = (Repeter) startNode;
+            connected = node.getLinked();
+        }
+        if (connected.connectedComputers.containsKey(endNode.getName())) {
+            visitedNodes.add(endNode.getName());
+            finalVisitedNodes.clear();
+            finalVisitedNodes.addAll(visitedNodes);
+            return true;
+        } else {
+            HashMap<String, Computer> connectedComputers = connected.connectedComputers;
+            for (Map.Entry<String, Computer> nodeItem : connectedComputers.entrySet()) {
 
-                    if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
-                        int newWeight = weight - 1;
-                        ArrayList<String> newVisitedNodes = new ArrayList<>();
-                        newVisitedNodes.addAll(visitedNodes);
-                        if (newWeight >= 0) {
-                            newVisitedNodes.add(nodeItem.getValue().getName());
-                            Computer nextNode = nodeItem.getValue();
-                            status = tracePath(nextNode, endNode, newWeight, newVisitedNodes);
-                            if (status) {
-                                return status;
-                            }
+                if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
+                    int newWeight = weight - 1;
+                    ArrayList<String> newVisitedNodes = new ArrayList<>();
+                    newVisitedNodes.addAll(visitedNodes);
+                    if (newWeight >= 0) {
+                        newVisitedNodes.add(nodeItem.getValue().getName());
+                        Computer nextNode = nodeItem.getValue();
+                        status = tracePath(nextNode, endNode, newWeight, newVisitedNodes);
+                        if (status) {
+                            return status;
                         }
                     }
-
                 }
-
-                HashMap<String, Repeter> connectedRepeter = connected.connectedRepeters;
-                for (Map.Entry<String, Repeter> nodeItem : connectedRepeter.entrySet()) {
-                    if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
-                        int newWeight = weight * 2;
-                        ArrayList<String> newVisitedNodes = new ArrayList<>();
-                        newVisitedNodes.addAll(visitedNodes);
-                        if (newWeight >= 0) {
-                            newVisitedNodes.add(nodeItem.getValue().getName());
-                            Repeter nextNode = nodeItem.getValue();
-                            status = tracePath(nextNode, endNode, newWeight, newVisitedNodes);
-                            if (status) {
-                                return status;
-                            }
-                        }
-                    }
-
-                }
-
             }
 
-        } else if (startNode instanceof Repeter) {
-            Repeter nodeRepeter = (Repeter) startNode;
-            if (nodeRepeter.getLinked().connectedComputers.containsKey(endNode.getName())) {
-                visitedNodes.add(endNode.getName());
-                finalVisitedNodes.clear();
-                finalVisitedNodes.addAll(visitedNodes);
-                return true;
-            } else {
-                ConnectedNodes connected = nodeRepeter.getLinked();
-                HashMap<String, Computer> connectedComputers = connected.connectedComputers;
-                for (Map.Entry<String, Computer> nodeItem : connectedComputers.entrySet()) {
-
-                    if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
-                        int newWeight = weight - 1;
-                        ArrayList<String> newVisitedNodes = new ArrayList<>();
-                        newVisitedNodes.addAll(visitedNodes);
-                        if (newWeight >= 0) {
-                            newVisitedNodes.add(nodeItem.getValue().getName());
-                            Computer nextNode = nodeItem.getValue();
-                            status = tracePath(nextNode, endNode, newWeight, newVisitedNodes);
-                            if (status) {
-                                return status;
-                            }
+            HashMap<String, Repeter> connectedRepeter = connected.connectedRepeters;
+            for (Map.Entry<String, Repeter> nodeItem : connectedRepeter.entrySet()) {
+                if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
+                    int newWeight = weight * 2;
+                    ArrayList<String> newVisitedNodes = new ArrayList<>();
+                    newVisitedNodes.addAll(visitedNodes);
+                    if (newWeight >= 0) {
+                        newVisitedNodes.add(nodeItem.getValue().getName());
+                        Repeter nextNode = nodeItem.getValue();
+                        status = tracePath(nextNode, endNode, newWeight, newVisitedNodes);
+                        if (status) {
+                            return status;
                         }
                     }
-
                 }
-
-                HashMap<String, Repeter> connectedRepeter = connected.connectedRepeters;
-                for (Map.Entry<String, Repeter> nodeItem : connectedRepeter.entrySet()) {
-                    if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
-                        int newWeight = weight * 5;
-                        ArrayList<String> newVisitedNodes = new ArrayList<>();
-                        newVisitedNodes.addAll(visitedNodes);
-                        if (newWeight >= 0) {
-                            newVisitedNodes.add(nodeItem.getValue().getName());
-                            Repeter nextNode = nodeItem.getValue();
-                            status = tracePath(nextNode, endNode, newWeight, newVisitedNodes);
-                            if (status) {
-                                return status;
-                            }
-                        }
-                    }
-
-                }
-
             }
         }
         return false;
-
     }
 }
