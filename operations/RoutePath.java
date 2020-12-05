@@ -76,7 +76,7 @@ public class RoutePath {
                 HashMap<String, Repeter> connectedRepeter = connected.connectedRepeters;
                 for (Map.Entry<String, Repeter> nodeItem : connectedRepeter.entrySet()) {
                     if (!(visitedNodes.contains(nodeItem.getValue().getName()))) {
-                        int newWeight = weight * 5;
+                        int newWeight = weight * 2;
                         ArrayList<String> newVisitedNodes = new ArrayList<>();
                         newVisitedNodes.addAll(visitedNodes);
                         if (newWeight >= 0) {
